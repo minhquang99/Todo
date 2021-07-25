@@ -12,16 +12,16 @@ function App() {
   const [todoList, setTodoList] = useState([]);
   const [textInput, setInputText] = useState("");
 
-  useEffect(() => {
-    const storageTodoList = localStorage.getItem(TODO_APP_STORAGE);
-    if(localStorage.getItem(storageTodoList)){
-      setTodoList(JSON.parse(storageTodoList));
-    }
-  }, [])
+  // useEffect(() => {
+  //   const storageTodoList = localStorage.getItem(TODO_APP_STORAGE);
+  //   if(localStorage.getItem(storageTodoList)){
+  //     setTodoList(JSON.parse(storageTodoList));
+  //   }
+  // }, [])
 
-  useEffect(() => {
-    localStorage.setItem(TODO_APP_STORAGE, JSON.stringify(todoList));
-  }, [todoList]);
+  // useEffect(() => {
+  //   localStorage.setItem(TODO_APP_STORAGE, JSON.stringify(todoList));
+  // }, [todoList]);
 
   const onTextInputChange = 
     (e) => {
@@ -36,6 +36,13 @@ function App() {
 
   const onCheckBtnClick = (id) => {
     setTodoList(prevSate => prevSate.map(todo => todo.id === id ? {...todo, isCompleted: true} : todo));
+    
+  }
+
+  const onTrashBtnClick = (id) => {
+    const newTodoList = [...todoList];
+    newTodoList.splice(id, 1);
+    setTodoList(newTodoList);
   }
 
   return (
@@ -49,7 +56,7 @@ function App() {
       value={textInput}
       onChange={onTextInputChange}
       ></Textfield>
-      <TodoList todoList={todoList} onCheckBtnClick={onCheckBtnClick}/> 
+      <TodoList todoList={todoList} onCheckBtnClick={onCheckBtnClick} onTrashBtnClick={onTrashBtnClick}/> 
     </div>
   );
 }
