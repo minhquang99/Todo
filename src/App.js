@@ -3,6 +3,7 @@ import Textfield from '@atlaskit/textfield';
 import Button from "@atlaskit/button"
 import { useState } from "react";
 import { v4 } from 'uuid';
+import React, { useEffect, useCallback } from "react";
 
 const TODO_APP_STORAGE = 'TODO_APP';
 
@@ -12,27 +13,27 @@ function App() {
   const [todoList, setTodoList] = useState([]);
   const [textInput, setInputText] = useState("");
 
-  // useEffect(() => {
-  //   const storageTodoList = localStorage.getItem(TODO_APP_STORAGE);
-  //   if(localStorage.getItem(storageTodoList)){
-  //     setTodoList(JSON.parse(storageTodoList));
-  //   }
-  // }, [])
+  useEffect(() => {
+    const storageTodoList = localStorage.getItem(TODO_APP_STORAGE);
+    if(storageTodoList){
+      setTodoList(JSON.parse(storageTodoList));
+    }
+  }, [])
 
-  // useEffect(() => {
-  //   localStorage.setItem(TODO_APP_STORAGE, JSON.stringify(todoList));
-  // }, [todoList]);
+  useEffect(() => {
+    localStorage.setItem(TODO_APP_STORAGE, JSON.stringify(todoList));
+  }, [todoList]);
 
   const onTextInputChange = 
-    (e) => {
+    useCallback((e) => {
       setInputText(e.target.value);
-    }
+    }, []);
 
   const onAddButtonClick = 
-    (e) => {
+    useCallback((e) => {
       setTodoList([{id: v4(), name: textInput, isCompleted: false}, ...todoList]);
       setInputText("");
-    }
+    }, [textInput, todoList]);
 
   const onCheckBtnClick = (id) => {
     setTodoList(prevSate => prevSate.map(todo => todo.id === id ? {...todo, isCompleted: true} : todo));
